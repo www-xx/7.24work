@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 1500px;
+            height: 600px;
+            background-image: url(img/1.jpg);
+            margin: 0 auto;
+        }
+
+        .btn {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            width: 100%;
+            height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+
+    </div>
+    <div class="btn">
+        <input class="start" type="button" value="开始游戏">
+        <input class="stop" type="button" value="暂停游戏">
+        <input class="guan" type="button" value="结束游戏">
+        <div>
+            <span>得分:</span>
+            <span class="fen"></span>
+        </div>
+    </div>
+
+
+    <script>
+        var box = document.querySelector(".box")
+        var texts = []
+        var fen = document.querySelector(".fen")
+
+        var flag = false
+        var score = 0
+        function create(num) {
+
+            var current = [];
+            for (var i = 0; i < num; i++) {    //生成随机字母
+                var charCode = 65 + Math.floor(Math.random() * 26);
+                current.push(String.fromCharCode(charCode))
+
+            }
+
+            for (var i = 0; i < current.length; i++) {
+                var text = document.createElement("div")
+                text.innerHTML = current[i];
+                text.style.cssText = "color:#fff;font-size:70px;position:absolute;left:" + 1000 * Math.random() + "px;top:" + 300 * Math.random() + "px;"
+                box.appendChild(text)
+                texts.push(text)
+                console.log(texts[i])
+            }
+
+        }
+
+
+        var speed = 5
+        var zimu = document.querySelectorAll(".box div")
+        console.log(zimu)
+        var t = setInterval(function () {
+            for (var i = 0; i < texts.length; i++) {
+                texts[i].style.top = texts[i].offsetTop + speed + "px"
+            }
+
+        }, 50)
+
+
+        document.onkeydown = function (ev) {
+            var letter = String.fromCharCode(ev.keyCode)
+            console.log(letter)
+            console.log(zimu)
+            for (var i = 0; i < texts.length; i++) {
+
+                if (texts[i].innerHTML == letter) {
+                    score += 10;
+                    fen.innerHTML = score
+                    console.log(score)
+                    box.removeChild(texts[i])
+                    texts.splice(i, 1);
+                    if (!flag) {
+                        create(1)
+                    }
+
+                    break;
+
+                }
+            }
+        }
+
+        var start = document.querySelector(".start")
+        var stop = document.querySelector(".stop")
+        var guan = document.querySelector(".guan")
+        start.onclick = function () {
+            create(5)
+        }
+        stop.onclick = function () {
+            alert("暂停")
+        }
+        guan.onclick = function () {
+
+            clearInterval(t)
+            setTimeout(function () {
+                location.reload()
+            }, 2000)
+
+        }
+    </script>
+</body>
+
+</html>
